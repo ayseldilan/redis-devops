@@ -28,10 +28,7 @@ jobs:
         run: pytest
 
       - name: Lint Dockerfile
-        run: |
-          curl -sL -o hadolint https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64
-          chmod +x hadolint
-          ./hadolint Dockerfile
+        run: docker run --rm -i hadolint/hadolint < Dockerfile
 
       - name: Build Docker image
         run: docker build -t fastapi-redis-app:${{ github.sha }} .
@@ -45,4 +42,3 @@ jobs:
         run: |
           docker tag fastapi-redis-app:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/fastapi-redis-app:${{ github.sha }}
           docker push ghcr.io/${{ github.repository_owner }}/fastapi-redis-app:${{ github.sha }}
-          
